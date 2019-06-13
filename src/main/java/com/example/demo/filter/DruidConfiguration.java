@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Configuration;
 public class DruidConfiguration {
     @Bean
     public ServletRegistrationBean druidStatViewServle(){
-
         //ServletRegistrationBean提供类的进行注册
         StatViewServlet a= new StatViewServlet();
         ServletRegistrationBean servletRegistrationBean=new ServletRegistrationBean(a,true,"/druid/*");
