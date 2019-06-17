@@ -3,6 +3,8 @@ package com.example.demo.listener;
 import com.example.demo.model.AyUser;
 import com.example.demo.service.AyUserService;
 import com.sun.org.apache.regexp.internal.REDebugCompiler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -20,6 +22,8 @@ import java.util.List;
 @WebListener
 public class AyUserListener implements ServletContextListener {
     private static final String ALL="ALL_LIST";
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private AyUserService ayUserService;
 
@@ -33,7 +37,6 @@ public class AyUserListener implements ServletContextListener {
         redisTemplate.opsForList().leftPushAll(ALL,list);
         //测试一下 ，获取数据
         List<AyUser> list1=redisTemplate.opsForList().range(ALL,0,-1);
-        System.out.println(list.size()+"个数");
     }
 
     @Override
