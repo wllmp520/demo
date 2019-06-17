@@ -3,6 +3,7 @@ package com.example.demo.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  *@Description: 用户表实体
@@ -11,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ay_user")
-public class AyUser {
+public class AyUser implements Serializable {
     @Id
     private String id;
     private String name;

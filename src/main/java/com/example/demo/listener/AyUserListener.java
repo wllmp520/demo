@@ -1,8 +1,15 @@
 package com.example.demo.listener;
 
+import com.example.demo.model.AyUser;
+import com.example.demo.service.AyUserService;
+import com.sun.org.apache.regexp.internal.REDebugCompiler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.util.List;
 
 /**
  * @program: demo
@@ -12,9 +19,21 @@ import javax.servlet.annotation.WebListener;
  */
 @WebListener
 public class AyUserListener implements ServletContextListener {
+    private static final String ALL="ALL_LIST";
+    @Autowired
+    private AyUserService ayUserService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        System.out.println("contextInitialized=========上下文初始化");
+        System.out.println("contextInitialized========Redis存储所有用户信息");
+        List<AyUser> list=ayUserService.findAll();
+        redisTemplate.delete(ALL);
+        redisTemplate.opsForList().leftPushAll(ALL,list);
+        //测试一下 ，获取数据
+        List<AyUser> list1=redisTemplate.opsForList().range(ALL,0,-1);
+        System.out.println(list.size()+"个数");
     }
 
     @Override

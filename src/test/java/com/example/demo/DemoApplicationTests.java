@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -28,6 +30,11 @@ public class DemoApplicationTests {
 
     @Resource
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Test
     public void contextLoads() {
@@ -87,5 +94,14 @@ public class DemoApplicationTests {
         PageRequest pageRequest=PageRequest.of(0,10);
         Page<AyUser> user5=ayUserService.findAll(pageRequest);
         System.out.println("findAll(pageRequest)"+user5.getTotalPages());
+    }
+    //测试集成redis
+    @Test
+    public void testRedis(){
+        redisTemplate.opsForValue().set("name","wl");
+        String name= (String) redisTemplate.opsForValue().get("name");
+       // System.out.println(name);
+        stringRedisTemplate.opsForValue().set("it","lmp");
+        System.out.println(stringRedisTemplate.opsForValue().get("it"));
     }
 }
