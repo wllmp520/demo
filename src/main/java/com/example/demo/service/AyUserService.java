@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * @program: demo
@@ -17,6 +18,7 @@ import java.util.List;
 public interface AyUserService {
     AyUser findById(String id);
     List<AyUser> findAll();
+    Future<List<AyUser>> findAsynAll();//异步调用方法
     AyUser save(AyUser ayUser);
     void delete(String id);
     //分页

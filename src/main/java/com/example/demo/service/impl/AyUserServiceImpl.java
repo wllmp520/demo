@@ -7,10 +7,13 @@ import com.example.demo.service.AyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * @program: demo
@@ -33,7 +36,21 @@ public class AyUserServiceImpl implements AyUserService {
 
     @Override
     public List<AyUser> findAll() {
-        return ayUserRepository.findAll();
+        System.out.println("task...begin");
+        long start=System.currentTimeMillis();
+        List<AyUser> all = ayUserRepository.findAll();
+        System.out.println("task...finish:"+(System.currentTimeMillis()-start)+"ms");
+        return all ;
+    }
+
+    @Override
+    @Async
+    public Future<List<AyUser>> findAsynAll() {
+        System.out.println("findAsynAll...begin");
+        long start=System.currentTimeMillis();
+        List<AyUser> all = ayUserRepository.findAll();
+        System.out.println("findAsynAll...finish:"+(System.currentTimeMillis()-start)+"ms");
+        return new AsyncResult<List<AyUser>>(all);
     }
 
     @Override
@@ -43,7 +60,7 @@ public class AyUserServiceImpl implements AyUserService {
 
     @Override
     public void delete(String id) {
-
+       ayUserRepository.deleteById(id);
     }
 
     /**

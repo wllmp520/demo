@@ -1,7 +1,11 @@
 package com.example.demo;
 
+import com.example.demo.activemq.AyMoodProducer;
+import com.example.demo.model.AyMood;
 import com.example.demo.model.AyUser;
+import com.example.demo.service.AyMoodService;
 import com.example.demo.service.AyUserService;
+import org.apache.activemq.command.ActiveMQQueue;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,14 +20,21 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import javax.jms.Destination;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest//引入了入口类的配置
 public class DemoApplicationTests {
+    @Autowired
+    private  AyMoodProducer ayMoodProducer;
+    @Autowired
+    private AyMoodService ayMoodService;
 
     @Autowired
     private AyUserService ayUserService;
@@ -110,5 +121,49 @@ public class DemoApplicationTests {
     public void testMybatis(){
         AyUser ayUser= ayUserService.findByNameAndPassword("b","9998");
         Assert.assertNotNull(ayUser);
+    }
+
+    @Test
+    public void testAyMood(){
+        AyMood ayMood=new AyMood();
+        ayMood.setId("1");
+        ayMood.setUserId("1");
+        ayMood.setPraiseNum(0);
+        ayMood.setContent("第一条微信说说");
+        ayMood.setPublishTime(new Date());
+        ayMoodService.save(ayMood);
+    }
+
+    @Test
+    public void testActiveMQ(){
+        //模拟用户发表微信说说
+        AyMood ayMood=new AyMood();
+        ayMood.setId("2");
+        ayMood.setUserId("2");
+        ayMood.setPraiseNum(0);
+        ayMood.setContent("第二条微信说说");
+        ayMood.setPublishTime(new Date());
+        String status= ayMoodService.aysncSave(ayMood);
+        System.out.println("异步消息发送:"+status);
+    }
+    @Test
+    public void testAsync() throws InterruptedException{
+       /* System.out.println("beginSynchroTest...");
+        long start=System.currentTimeMillis();
+        ayUserService.findAll();
+        ayUserService.findAll();
+        ayUserService.findAll();
+        System.out.println("endSynchroTest..."+(System.currentTimeMillis()-start)+"ms");
+*/
+        System.out.println("beginfindAsynAllTest...");
+        long start1=System.currentTimeMillis();
+        Future<List<AyUser>> asynAll = ayUserService.findAsynAll();
+        Future<List<AyUser>> all = ayUserService.findAsynAll();
+        Future<List<AyUser>> all1 = ayUserService.findAsynAll();
+        while (true){
+            if(asynAll.isDone() && all.isDone() && all1.isDone()) break;
+            else Thread.sleep(10);
+        }
+        System.out.println("endfindAsynAllTest..."+(System.currentTimeMillis()-start1)+"ms");
     }
 }
