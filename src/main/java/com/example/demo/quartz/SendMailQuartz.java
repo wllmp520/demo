@@ -26,8 +26,8 @@ public class SendMailQuartz {
 
     @Scheduled(cron = "*/5 * * * * *")
     public void sendEmailToHaiS(){
-        sendJunkMailService.sendMail("2320495729@qq.com");
-        sendJunkMailService.sendMail("1413466100@qq.com");
+        //sendJunkMailService.sendMail("2320495729@qq.com");
+        //sendJunkMailService.sendMail("1413466100@qq.com");
         System.out.println("海生正在接收....");
     }
 }

@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.AyUserRepository;
 import com.example.demo.model.AyUser;
+import com.example.demo.repo.AyUserDao;
 import com.example.demo.service.AyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,9 @@ import java.util.List;
 public class AyUserServiceImpl implements AyUserService {
     @Autowired
     private AyUserRepository ayUserRepository;
+
+    @Autowired
+    private AyUserDao ayUserDao;
 
     @Override
     public AyUser findById(String id) {
@@ -65,5 +69,10 @@ public class AyUserServiceImpl implements AyUserService {
     @Override
     public List<AyUser> findByIdIn(Collection<String> ids) {
         return ayUserRepository.findByIdIn(ids);
+    }
+
+    @Override
+    public AyUser findByNameAndPassword(String name, String password) {
+        return ayUserDao.findByNameAndPassword(name,password);
     }
 }

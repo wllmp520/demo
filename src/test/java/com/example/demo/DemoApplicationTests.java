@@ -104,4 +104,11 @@ public class DemoApplicationTests {
         stringRedisTemplate.opsForValue().set("it","lmp");
         System.out.println(stringRedisTemplate.opsForValue().get("it"));
     }
+
+    //测试集成mybatis
+    @Test
+    public void testMybatis(){
+        AyUser ayUser= ayUserService.findByNameAndPassword("b","9998");
+        Assert.assertNotNull(ayUser);
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.AyUser;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -27,4 +28,6 @@ public interface AyUserService {
     List<AyUser> findByNameLike(String name);
 
     List<AyUser> findByIdIn(Collection<String> ids);
+
+    AyUser findByNameAndPassword(@Param("name") String name, @Param("password")String password);
 }
