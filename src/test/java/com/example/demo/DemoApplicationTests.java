@@ -135,7 +135,12 @@ public class DemoApplicationTests {
     }
 
     @Test
-    public void testActiveMQ(){
+    public void testActiveMQ1(){
+       Destination destination=new ActiveMQQueue("ayqueue");
+       ayMoodProducer.sendMessage(destination,"初步试用ActivMQ");
+    }
+    @Test
+    public void testActiveMQ2(){
         //模拟用户发表微信说说
         AyMood ayMood=new AyMood();
         ayMood.setId("2");
