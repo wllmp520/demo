@@ -1,5 +1,6 @@
 package com.example.demo.cotroller;
 
+import com.example.demo.exception.BusinessException;
 import com.example.demo.model.AyUser;
 import com.example.demo.service.AyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,18 @@ public class AyUserController {
         List<AyUser> userList=ayUserService.findAll();
         model.addAttribute("userList",userList);
         return  "ayUser";
+    }
+
+    @RequestMapping("/findAll")
+    public String findAll(Model model){
+        List<AyUser> userList=ayUserService.findAll();
+        model.addAttribute("userList",userList);
+        throw new BusinessException("业务异常？？？？");
+    }
+    @RequestMapping("/testRetry")
+    public String testRetry(Model model){
+        AyUser userList=ayUserService.findByNameAndPasswordRetry("a","a");
+        model.addAttribute("userList",userList);
+        return "success";
     }
 }

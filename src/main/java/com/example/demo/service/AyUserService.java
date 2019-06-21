@@ -16,6 +16,8 @@ import java.util.concurrent.Future;
  * @create: 2019-06-13 13:37
  */
 public interface AyUserService {
+    //带有重试机制的接口
+    AyUser findByNameAndPasswordRetry(String name,String password);
     AyUser findById(String id);
     List<AyUser> findAll();
     Future<List<AyUser>> findAsynAll();//异步调用方法
@@ -31,5 +33,5 @@ public interface AyUserService {
 
     List<AyUser> findByIdIn(Collection<String> ids);
 
-    AyUser findByNameAndPassword(@Param("name") String name, @Param("password")String password);
+    AyUser findByNameAndPassword(String name, String password);
 }

@@ -1,12 +1,15 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.AyUserRepository;
+import com.example.demo.exception.BusinessException;
 import com.example.demo.model.AyUser;
 import com.example.demo.repo.AyUserDao;
 import com.example.demo.service.AyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,13 @@ public class AyUserServiceImpl implements AyUserService {
 
     @Autowired
     private AyUserDao ayUserDao;
+
+    @Override
+    @Retryable(value = {BusinessException.class},backoff = @Backoff(delay = 5000,multiplier = 2))
+    public AyUser findByNameAndPasswordRetry(String name, String password) {
+        System.out.println("主动扔出异常，测试重试机制");
+        throw new BusinessException();
+    }
 
     @Override
     public AyUser findById(String id) {
