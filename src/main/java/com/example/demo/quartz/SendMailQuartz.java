@@ -28,6 +28,6 @@ public class SendMailQuartz {
     public void sendEmailToHaiS(){
         //sendJunkMailService.sendMail("2320495729@qq.com");
         //sendJunkMailService.sendMail("1413466100@qq.com");
-        System.out.println("海生正在接收....");
+        System.out.println("I LOVE U");
     }
 }

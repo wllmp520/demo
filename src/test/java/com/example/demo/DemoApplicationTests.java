@@ -3,7 +3,9 @@ package com.example.demo;
 import com.example.demo.activemq.AyMoodProducer;
 import com.example.demo.model.AyMood;
 import com.example.demo.model.AyUser;
+import com.example.demo.model.AyUserAttachmentRel;
 import com.example.demo.service.AyMoodService;
+import com.example.demo.service.AyUserAttachmentRelService;
 import com.example.demo.service.AyUserService;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.junit.Assert;
@@ -46,6 +48,8 @@ public class DemoApplicationTests {
     private RedisTemplate redisTemplate;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private AyUserAttachmentRelService ayUserAttachmentRelService;
 
     @Test
     public void contextLoads() {
@@ -134,6 +138,7 @@ public class DemoApplicationTests {
         ayMoodService.save(ayMood);
     }
 
+    //测试ActivMQ 的队列消息
     @Test
     public void testActiveMQ1(){
        Destination destination=new ActiveMQQueue("ayqueue");
@@ -151,6 +156,7 @@ public class DemoApplicationTests {
         String status= ayMoodService.aysncSave(ayMood);
         System.out.println("异步消息发送:"+status);
     }
+    //测试Java异步机制，
     @Test
     public void testAsync() throws InterruptedException{
        /* System.out.println("beginSynchroTest...");
@@ -170,5 +176,16 @@ public class DemoApplicationTests {
             else Thread.sleep(10);
         }
         System.out.println("endfindAsynAllTest..."+(System.currentTimeMillis()-start1)+"ms");
+    }
+
+    //测试MongoDB
+    @Test
+    public void  testMongoDB(){
+        AyUserAttachmentRel a=new AyUserAttachmentRel();
+        a.setId("1");
+        a.setFileName("我好帅");
+        a.setUserId("1");
+        AyUserAttachmentRel save = ayUserAttachmentRelService.save(a);
+        System.out.println(save.getFileName());
     }
 }
